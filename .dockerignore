@@ -1,0 +1,10 @@
+*/*.zip
+*/*.sh
+*/*.pyc
+*/__pycache__*
+
+*.zip
+*.sh
+*.pyc
+__pycache__
+env/
