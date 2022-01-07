@@ -15,7 +15,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docke
 apt-get update
 apt-get install docker-ce docker-ce-cli containerd.io
 sudo docker run hello-world
-sudo adduser $USER docker
 
-echo "Please logout of Ubuntu and log back in to be a member of docker group"
+sudo usermod -aG docker $USER && newgrp docker
+#echo "Please logout of Ubuntu and log back in to be a member of docker group"
 
