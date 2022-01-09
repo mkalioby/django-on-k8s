@@ -14,9 +14,18 @@ spec:
       labels:
         app: django-example
     spec:
+      volumes:
+        - name: sqlite-volume
+          hostPath:
+            path: /storage/sqlite/example/db.sqlite3
+            type: File
       containers:
       - name: web-app
         image: django-example:v1.0
         ports:
         - containerPort: 80
+        volumeMounts:
+            - name: sqlite-volume
+              mountPath: /app/db.sqlite3
+
  
