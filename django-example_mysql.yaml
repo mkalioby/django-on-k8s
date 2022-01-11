@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-example-mysql
+  labels:
+    app: django-example-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-example-mysql
+  template:
+    metadata:
+      labels:
+        app: django-example-mysql
+    spec:
+      volumes:
+        - name: mysql-volume
+          hostPath:
+            path: /storage/mysql/django-example/
+            type: Directory
+      containers:
+      - name: web-app
+        image: django-example-mysql:v1.0
+        command: ['/bin/bash']
+        args: ['-c','python manage.py migrate; gunicorn -w 4 k8s.wsgi -b 0.0.0.0:80']
+        ports:
+        - containerPort: 80
+
+      - name: mysql
+        image: django-example-db:v1.0
+        volumeMounts:
+          - name: mysql-volume
+            mountPath: /var/lib/mysql/
+
+ 
