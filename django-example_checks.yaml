@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-example
+  labels:
+    app: django-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-example
+  template:
+    metadata:
+      labels:
+        app: django-example
+    spec:
+      volumes:
+        - name: sqlite-volume
+          hostPath:
+            path: /storage/sqlite/example/db.sqlite3
+            type: File
+      containers:
+      - name: web-app
+        image: django-example:v1.0
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          periodSeconds: 5
+          initialDelaySeconds: 5
+          failureThreshold: 100
+          exec:
+            command:
+            - cat
+            - /tmp/ready
+        livenessProbe:
+           httpGet:
+             path: /
+             port: 80
+           initialDelaySeconds: 2
+           periodSeconds: 3
+        volumeMounts:
+            - name: sqlite-volume
+              mountPath: /app/db.sqlite3
+
+ 
